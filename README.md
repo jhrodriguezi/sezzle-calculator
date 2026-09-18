@@ -128,3 +128,7 @@ npm run test:coverage   # with coverage report (text + HTML in coverage/)
   in the display, the same way a real calculator shows `Error`, instead of a separate banner.
 - **Assumptions.** Percentage is `(a / 100) * b` ("a percent of b") since the shape doesn't imply a
   semantic; negative square-root input returns a `400` rather than a complex result.
+- **Bounded operand validation.** `a`/`b` are validated against a sane range (`±1e15`), and the
+  exponent for `exponentiate` is additionally capped (`±1000`), *before* any math runs — e.g.
+  `10 ^ 1000000` returns a clear `400` instead of relying on a post-hoc `Inf`/`NaN` check. Request
+  bodies are also capped at 1 MiB to avoid oversized payloads.

@@ -70,7 +70,17 @@ Example:
 
 **Error responses:** `400 Bad Request`
 
-Returned when the request body is malformed, the `operation` is unsupported, a division by zero is attempted, a negative number's square root is requested, or the operation otherwise produces an invalid result (e.g. `0` raised to a negative power).
+Returned when the request body is malformed or too large, the `operation` is unsupported, an
+operand is out of the allowed range, a division by zero is attempted, a negative number's square
+root is requested, or the operation otherwise produces an invalid result (e.g. `0` raised to a
+negative power).
+
+Input validation rules:
+
+- `a` and `b` must each be finite and within `-1e15` to `1e15`.
+- For `exponentiate`, `b` (the exponent) must additionally be within `-1000` to `1000` — this
+  rejects inputs like `10 ^ 1000000` up front instead of computing an overflowed/`Inf` result.
+- Request bodies larger than 1 MiB are rejected before parsing.
 
 ```json
 {
@@ -87,6 +97,18 @@ Returned when the request body is malformed, the `operation` is unsupported, a d
 ```json
 {
   "error": "cannot take the square root of a negative number"
+}
+```
+
+```json
+{
+  "error": "exponent must be between -1000 and 1000"
+}
+```
+
+```json
+{
+  "error": "a must be between -1e+15 and 1e+15"
 }
 ```
 

@@ -18,6 +18,17 @@ const (
 	Percentage   Operation = "percentage"
 )
 
+// maxOperand bounds every operand to a range comfortably inside float64's
+// precise range, so results stay meaningful (a real calculator has no use
+// for numbers this large anyway).
+const maxOperand = 1e15
+
+// maxExponent additionally bounds the exponent for Exponentiate. Even a
+// modest base quickly overflows float64 with a large-enough exponent (e.g.
+// 10^1000000), so this is validated before math.Pow ever runs, rather than
+// relying solely on the post-hoc Inf/NaN check below.
+const maxExponent = 1000
+
 // fn is the signature every operation implements. Unary operations (e.g.
 // SquareRoot) simply ignore b.
 type fn func(a, b float64) (float64, error)
@@ -42,6 +53,13 @@ func Evaluate(operation string, a, b float64) (float64, error) {
 		return 0, fmt.Errorf("unsupported operation: %s", operation)
 	}
 
+	if err := validateOperand("a", a); err != nil {
+		return 0, err
+	}
+	if err := validateOperand("b", b); err != nil {
+		return 0, err
+	}
+
 	result, err := op(a, b)
 	if err != nil {
 		return 0, err
@@ -52,6 +70,18 @@ func Evaluate(operation string, a, b float64) (float64, error) {
 	}
 
 	return result, nil
+}
+
+// validateOperand rejects operands that are non-finite or unreasonably
+// large, before any operation function runs.
+func validateOperand(name string, v float64) error {
+	if math.IsNaN(v) || math.IsInf(v, 0) {
+		return fmt.Errorf("%s must be a finite number", name)
+	}
+	if math.Abs(v) > maxOperand {
+		return fmt.Errorf("%s must be between -%g and %g", name, maxOperand, maxOperand)
+	}
+	return nil
 }
 
 func add(a, b float64) (float64, error) {
@@ -75,6 +105,9 @@ func divide(a, b float64) (float64, error) {
 
 // exponentiate computes a raised to the power of b (a^b).
 func exponentiate(a, b float64) (float64, error) {
+	if math.Abs(b) > maxExponent {
+		return 0, fmt.Errorf("exponent must be between -%d and %d", maxExponent, maxExponent)
+	}
 	if a == 0 && b < 0 {
 		return 0, fmt.Errorf("cannot raise zero to a negative power")
 	}

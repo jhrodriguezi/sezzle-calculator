@@ -26,8 +26,13 @@ func Health(w http.ResponseWriter, r *http.Request) {
 	writeJSON(w, http.StatusOK, map[string]string{"status": "ok"})
 }
 
+// maxRequestBodyBytes caps the request body to guard against oversized payloads.
+const maxRequestBodyBytes = 1 << 20 // 1 MiB
+
 // Calculate decodes a calculation request, evaluates it, and encodes the result.
 func Calculate(w http.ResponseWriter, r *http.Request) {
+	r.Body = http.MaxBytesReader(w, r.Body, maxRequestBodyBytes)
+
 	var req calculateRequest
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
 		writeJSON(w, http.StatusBadRequest, errorResponse{Error: "invalid request body"})

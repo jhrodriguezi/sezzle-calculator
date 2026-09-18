@@ -27,6 +27,18 @@ func TestHealth(t *testing.T) {
 	}
 }
 
+func TestCalculateBodyTooLarge(t *testing.T) {
+	huge := `{"operation":"add","a":1,"b":1,"padding":"` + strings.Repeat("x", maxRequestBodyBytes) + `"}`
+	req := httptest.NewRequest(http.MethodPost, "/api/calculate", strings.NewReader(huge))
+	rec := httptest.NewRecorder()
+
+	Calculate(rec, req)
+
+	if rec.Code != http.StatusBadRequest {
+		t.Fatalf("status = %d, want %d", rec.Code, http.StatusBadRequest)
+	}
+}
+
 func TestCalculate(t *testing.T) {
 	tests := []struct {
 		name       string
@@ -40,6 +52,8 @@ func TestCalculate(t *testing.T) {
 		{"valid percentage", `{"operation":"percentage","a":25,"b":200}`, http.StatusOK, 50},
 		{"divide by zero", `{"operation":"divide","a":1,"b":0}`, http.StatusBadRequest, 0},
 		{"square root of negative", `{"operation":"square_root","a":-9}`, http.StatusBadRequest, 0},
+		{"exponent too large", `{"operation":"exponentiate","a":10,"b":1000000}`, http.StatusBadRequest, 0},
+		{"operand too large", `{"operation":"add","a":1e16,"b":1}`, http.StatusBadRequest, 0},
 		{"bad json", `not-json`, http.StatusBadRequest, 0},
 	}
 

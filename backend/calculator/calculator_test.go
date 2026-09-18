@@ -22,6 +22,11 @@ func TestEvaluate(t *testing.T) {
 		{"square root of negative", "square_root", -4, 0, 0, true},
 		{"percentage", "percentage", 20, 50, 10, false},
 		{"unsupported", "modulo", 1, 1, 0, true},
+		{"exponent too large", "exponentiate", 10, 1000000, 0, true},
+		{"exponent at boundary", "exponentiate", 2, 10, 1024, false},
+		{"operand a too large", "add", 1e16, 1, 0, true},
+		{"operand b too large", "add", 1, -1e16, 0, true},
+		{"operand at boundary", "add", 1e15, 0, 1e15, false},
 	}
 
 	for _, tt := range tests {
