@@ -154,26 +154,19 @@ export default function Calculator() {
         </div>
       </div>
 
-      <div className="keypad">
-        <button type="button" className="key function advanced" onClick={applySquareRoot}>
-          √
+      <div className="advanced-row">
+        <button type="button" className="key advanced" onClick={applySquareRoot}>
+          √x
         </button>
-        <button
-          type="button"
-          className="key function advanced"
-          onClick={() => chooseOperation("exponentiate")}
-        >
-          x^y
+        <button type="button" className="key advanced" onClick={() => chooseOperation("exponentiate")}>
+          x<sup>y</sup>
         </button>
-        <button
-          type="button"
-          className="key function advanced"
-          onClick={() => chooseOperation("percentage")}
-        >
+        <button type="button" className="key advanced" onClick={() => chooseOperation("percentage")}>
           %
         </button>
-        <span className="key spacer" aria-hidden="true" />
+      </div>
 
+      <div className="keypad">
         <button type="button" className="key function" onClick={clear}>
           AC
         </button>

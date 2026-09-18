@@ -62,7 +62,7 @@ describe("Calculator", () => {
 
     await user.click(screen.getByRole("button", { name: "1" }));
     await user.click(screen.getByRole("button", { name: "6" }));
-    await user.click(screen.getByRole("button", { name: "√" }));
+    await user.click(screen.getByRole("button", { name: "√x" }));
 
     expect(mockedCalculate).toHaveBeenCalledWith("square_root", 16, 0);
     expect(await screen.findByTestId("display")).toHaveTextContent("4");
@@ -74,7 +74,7 @@ describe("Calculator", () => {
     render(<Calculator />);
 
     await user.click(screen.getByRole("button", { name: "2" }));
-    await user.click(screen.getByRole("button", { name: "x^y" }));
+    await user.click(screen.getByRole("button", { name: "xy" }));
     await user.click(screen.getByRole("button", { name: "1" }));
     await user.click(screen.getByRole("button", { name: "0" }));
     await user.click(screen.getByRole("button", { name: "=" }));

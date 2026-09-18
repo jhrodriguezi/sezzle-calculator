@@ -96,8 +96,31 @@
   background: var(--calc-function-hover);
 }
 
+.calculator .advanced-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
 .calculator .key.advanced {
-  font-size: 14px;
+  aspect-ratio: auto;
+  height: 40px;
+  border-radius: 20px;
+  font-size: 15px;
+  font-weight: 600;
+  background: transparent;
+  color: var(--calc-function);
+  border: 1px solid var(--calc-function-bg);
+}
+
+.calculator .key.advanced sup {
+  font-size: 0.7em;
+}
+
+.calculator .key.advanced:hover {
+  background: var(--calc-function-bg);
+  color: var(--calc-text);
 }
 
 .calculator .key.operator {
@@ -124,11 +147,6 @@
   border-radius: 28px;
   text-align: left;
   padding-left: 24px;
-}
-
-.calculator .key.spacer {
-  background: transparent;
-  pointer-events: none;
 }
 
 @media (max-width: 420px) {
