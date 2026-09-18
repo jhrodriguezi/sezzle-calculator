@@ -1,0 +1,148 @@
+.calculator {
+  --calc-bg: #1c1d24;
+  --calc-screen-bg: #14151a;
+  --calc-digit: #2b2c36;
+  --calc-digit-hover: #383a47;
+  --calc-function: #9a9daa;
+  --calc-function-bg: #3a3c48;
+  --calc-function-hover: #474a59;
+  --calc-operator: #ff9f0a;
+  --calc-operator-bg: #3a2a15;
+  --calc-operator-hover: #4a3620;
+  --calc-text: #f5f5f7;
+
+  width: 100%;
+  max-width: 340px;
+  margin: 24px auto;
+  padding: 20px;
+  box-sizing: border-box;
+  background: var(--calc-bg);
+  border-radius: 24px;
+  box-shadow: var(--shadow);
+}
+
+.calculator .screen {
+  padding: 20px 16px 8px;
+  text-align: right;
+  overflow: hidden;
+}
+
+.calculator .expression {
+  min-height: 20px;
+  font-size: 16px;
+  color: var(--calc-function);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.calculator .display {
+  font-size: clamp(32px, 10vw, 48px);
+  font-weight: 500;
+  color: var(--calc-text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-height: 56px;
+  line-height: 1.2;
+}
+
+.calculator .display-error {
+  font-size: clamp(18px, 5vw, 22px);
+  font-weight: 600;
+  color: #ff6b6b;
+  white-space: normal;
+  line-height: 1.3;
+}
+
+.calculator .keypad {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+}
+
+.calculator .key {
+  font: inherit;
+  font-size: 22px;
+  font-weight: 500;
+  aspect-ratio: 1 / 1;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  color: var(--calc-text);
+  background: var(--calc-digit);
+  transition: background-color 0.12s ease, transform 0.08s ease;
+}
+
+.calculator .key:active {
+  transform: scale(0.94);
+}
+
+.calculator .key.digit {
+  background: var(--calc-digit);
+}
+
+.calculator .key.digit:hover {
+  background: var(--calc-digit-hover);
+}
+
+.calculator .key.function {
+  background: var(--calc-function-bg);
+  color: var(--calc-function);
+  font-size: 18px;
+}
+
+.calculator .key.function:hover {
+  background: var(--calc-function-hover);
+}
+
+.calculator .key.advanced {
+  font-size: 14px;
+}
+
+.calculator .key.operator {
+  background: var(--calc-operator-bg);
+  color: var(--calc-operator);
+}
+
+.calculator .key.operator:hover {
+  background: var(--calc-operator-hover);
+}
+
+.calculator .key.equals {
+  background: var(--calc-operator);
+  color: #1c1d24;
+}
+
+.calculator .key.equals:hover {
+  background: #ffb238;
+}
+
+.calculator .key.zero {
+  grid-column: span 2;
+  aspect-ratio: auto;
+  border-radius: 28px;
+  text-align: left;
+  padding-left: 24px;
+}
+
+.calculator .key.spacer {
+  background: transparent;
+  pointer-events: none;
+}
+
+@media (max-width: 420px) {
+  .calculator {
+    margin: 12px;
+    max-width: none;
+    padding: 16px;
+  }
+
+  .calculator .keypad {
+    gap: 10px;
+  }
+
+  .calculator .key {
+    font-size: 20px;
+  }
+}
