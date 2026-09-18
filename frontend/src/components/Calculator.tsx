@@ -8,6 +8,9 @@ const OPERATOR_SYMBOLS: Record<Operation, string> = {
   subtract: "−",
   multiply: "×",
   divide: "÷",
+  exponentiate: "^",
+  percentage: "%",
+  square_root: "√",
 };
 
 const MAX_DIGITS = 15;
@@ -112,6 +115,22 @@ export default function Calculator() {
     setOverwrite(true);
   }
 
+  /** Square root is unary: it applies immediately to the current value, with no pending operation. */
+  async function applySquareRoot() {
+    const current = Number(display);
+    const result = await runCalculation(current, 0, "square_root");
+    if (result === null) {
+      resetAfterError();
+      return;
+    }
+
+    setExpression(`√(${current}) =`);
+    setDisplay(String(result));
+    setPreviousValue(null);
+    setPendingOperation(null);
+    setOverwrite(true);
+  }
+
   function resetAfterError() {
     setPreviousValue(null);
     setPendingOperation(null);
@@ -136,6 +155,25 @@ export default function Calculator() {
       </div>
 
       <div className="keypad">
+        <button type="button" className="key function advanced" onClick={applySquareRoot}>
+          √
+        </button>
+        <button
+          type="button"
+          className="key function advanced"
+          onClick={() => chooseOperation("exponentiate")}
+        >
+          x^y
+        </button>
+        <button
+          type="button"
+          className="key function advanced"
+          onClick={() => chooseOperation("percentage")}
+        >
+          %
+        </button>
+        <span className="key spacer" aria-hidden="true" />
+
         <button type="button" className="key function" onClick={clear}>
           AC
         </button>

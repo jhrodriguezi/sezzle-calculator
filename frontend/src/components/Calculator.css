@@ -96,6 +96,10 @@
   background: var(--calc-function-hover);
 }
 
+.calculator .key.advanced {
+  font-size: 14px;
+}
+
 .calculator .key.operator {
   background: var(--calc-operator-bg);
   color: var(--calc-operator);
@@ -120,6 +124,11 @@
   border-radius: 28px;
   text-align: left;
   padding-left: 24px;
+}
+
+.calculator .key.spacer {
+  background: transparent;
+  pointer-events: none;
 }
 
 @media (max-width: 420px) {

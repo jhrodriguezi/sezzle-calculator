@@ -54,4 +54,32 @@ describe("Calculator", () => {
     await user.click(screen.getByRole("button", { name: "AC" }));
     expect(screen.getByTestId("display")).toHaveTextContent("0");
   });
+
+  it("applies square root immediately as a unary operation", async () => {
+    mockedCalculate.mockResolvedValueOnce(4);
+    const user = userEvent.setup();
+    render(<Calculator />);
+
+    await user.click(screen.getByRole("button", { name: "1" }));
+    await user.click(screen.getByRole("button", { name: "6" }));
+    await user.click(screen.getByRole("button", { name: "√" }));
+
+    expect(mockedCalculate).toHaveBeenCalledWith("square_root", 16, 0);
+    expect(await screen.findByTestId("display")).toHaveTextContent("4");
+  });
+
+  it("performs exponentiation and percentage as binary operations", async () => {
+    mockedCalculate.mockResolvedValueOnce(1024);
+    const user = userEvent.setup();
+    render(<Calculator />);
+
+    await user.click(screen.getByRole("button", { name: "2" }));
+    await user.click(screen.getByRole("button", { name: "x^y" }));
+    await user.click(screen.getByRole("button", { name: "1" }));
+    await user.click(screen.getByRole("button", { name: "0" }));
+    await user.click(screen.getByRole("button", { name: "=" }));
+
+    expect(mockedCalculate).toHaveBeenCalledWith("exponentiate", 2, 10);
+    expect(await screen.findByTestId("display")).toHaveTextContent("1024");
+  });
 });
